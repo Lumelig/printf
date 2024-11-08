@@ -3,34 +3,74 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpflegha <jpflegha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jenne <jenne@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:29:52 by jpflegha          #+#    #+#             */
-/*   Updated: 2024/11/08 17:34:38 by jpflegha         ###   ########.fr       */
+/*   Updated: 2024/11/08 22:15:34 by jenne            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdarg.h>
+#include <unistd.h>
 
-int	ft_printf(char *str, ...)
+int	print_char(int c)
+{
+	return (write(1, &c, 1));
+}
+
+int	print_str(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (*str)
+	{
+		i += write(1, &str, 1);
+		str++;
+	}
+	return (i);
+}
+
+int	print_format(char c, va_list ap)
+{
+	int	i;
+
+	i = 0;
+	if (c == 'c')
+		i = print_char(va_arg(ap, int));
+	else if (c == 's')
+		i = print_str(va_arg(ap, char *));
+	else if (c == 'd')
+		i = print_digit(va_arg(ap, int), 10);
+	else if (c == 'x' || 'X')
+		i = print_digit(va_arg(ap, int), 16);
+	else
+		i += write(1, &c, 1);
+	return (i);
+}
+
+int	ft_printf(const char *str, ...)
 {
 	va_list	ap;
-	int i;
+	int		i;
 
 	i = 0;
 	va_start(ap, str);
 	while (str[i] != '/0')
 	{
-		if (str[i] == '%')
-			if (str[++i] == '%')
-				write(1, '%', 1);
-			else if (str[++i] == 'c')
-			else if (str[i++] == 's')
-			else if (str[i++] == 'p')
-			else if (str[i++] == 'd')
-			else if (str[i++] == 'i')
-			else if (str[i++] == 'x' || 'X')
-		i++;
+		if (*str == '%')
+			i += print_format(*(++str) ap);
+		else
+			i += write(1, str, 1);
+		++str;
 	}
+	va_end(ap);
+	return (i);
+}
+
+int	main()
+{
+	ft_printf("halllo");
+	return;
 }
