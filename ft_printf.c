@@ -6,7 +6,7 @@
 /*   By: jpflegha <jpflegha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:29:52 by jpflegha          #+#    #+#             */
-/*   Updated: 2024/11/09 18:23:30 by jpflegha         ###   ########.fr       */
+/*   Updated: 2024/11/09 19:21:03 by jpflegha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,12 @@ int	print_digit(long n, char c, int base)
 		i += write(1, "-", 1);
 		i += print_digit(-n, base, c);
 	}
+	else if (c == 'p')
+		i += write(1, "0x", 2);
 	else if (n < base)
 	{
 		if (c == 'X')
-			symbol = "0123456789ABCDF";
+			symbol = "0123456789ABCDEF";
 		return (print_char(symbol[n]));
 	}
 	else
@@ -68,6 +70,8 @@ int	print_format(char c, va_list ap)
 		i = print_str(va_arg(ap, char *));
 	else if (c == 'd' || c == 'u')
 		i = print_digit((long)(va_arg(ap, int)), 'd', 10);
+	else if (c == 'p')
+		i = print_digit((long)(va_arg(ap, unsigned int)), 'p', 16);
 	else if (c == 'x')
 		i = print_digit((long)(va_arg(ap, unsigned int)), 'x', 16);
 	else if (c == 'X')
@@ -100,8 +104,8 @@ int	main()
 {
     int i = 0;
 	char *s = "hallo";
-	i = ft_printf("halllo %% %d %u %d \n", -42, -42, i);
+	ft_printf("halllo %% %x %u \n", -2, 42);
     ft_printf("%d \n", i);
-    i = printf("halllo %% %X %u %p\n", -42, -42, i);
+    printf("halllo %% %X %u %p\n", -2, -42, &i);
 	return (1);
 }
