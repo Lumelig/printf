@@ -6,7 +6,7 @@
 /*   By: jpflegha <jpflegha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:36:49 by jpflegha          #+#    #+#             */
-/*   Updated: 2024/11/06 19:42:07 by jpflegha         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:32:01 by jpflegha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,15 @@ char	**ft_split(const char *s, char split)
 	return (result[i] = NULL, result);
 }
 
-// int main()
-// {
-// 	char c = ' ';
-//     char *s = "olol                     ";
-// 	char *error = "Wenn du das siehst ists falsch";
-// 	char **test = ft_split(s, c);
-// 	while(*test)
-// 	{
-// 		printf("%s\n", *test);
-// 		test++;
-// 	}
-// }
+int main()
+ {
+ 	char c = ' ';
+     char *s = "olol                     ";
+ 	char *error = "Wenn du das siehst ists falsch";
+ 	char **test = ft_split(s, c);
+	while(*test)
+	{
+		printf("%s\n", *test);
+ 		test++;
+ 	}
+}

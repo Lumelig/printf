@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jenne <jenne@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jpflegha <jpflegha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:29:52 by jpflegha          #+#    #+#             */
-/*   Updated: 2024/11/09 14:44:16 by jenne            ###   ########.fr       */
+/*   Updated: 2024/11/09 18:23:30 by jpflegha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
 #include <unistd.h>
+#include <stdio.h>
 
 int	print_char(int c)
 {
@@ -37,24 +38,23 @@ int	print_digit(long n, char c, int base)
 	int		i;
 	char	*symbol;
 
-	symbol = "0123456789sbcdef";
+	symbol = "0123456789abcdef";
 	i = 0;
-	if (n < 0)
+	if (n < 0 && c != 'u')
 	{
-		write(1, "-", 1);
-		return (print_digit(-n, base, c) + 1);
+		i += write(1, "-", 1);
+		i += print_digit(-n, base, c);
 	}
 	else if (n < base)
 	{
 		if (c == 'X')
-			symbol = "123456789ABCDF";
+			symbol = "0123456789ABCDF";
 		return (print_char(symbol[n]));
 	}
 	else
-	{
-		i = print_digit(n / base, c, base);
-		return (i + print_digit(n % base, c, base));
-	}
+		i += print_digit(n / base, c, base);
+	i += print_digit(n % base, c, base);
+    return (i);
 }
 
 int	print_format(char c, va_list ap)
@@ -66,7 +66,7 @@ int	print_format(char c, va_list ap)
 		i = print_char(va_arg(ap, int));
 	else if (c == 's')
 		i = print_str(va_arg(ap, char *));
-	else if (c == 'd')
+	else if (c == 'd' || c == 'u')
 		i = print_digit((long)(va_arg(ap, int)), 'd', 10);
 	else if (c == 'x')
 		i = print_digit((long)(va_arg(ap, unsigned int)), 'x', 16);
@@ -98,7 +98,10 @@ int	ft_printf(const char *str, ...)
 
 int	main()
 {
+    int i = 0;
 	char *s = "hallo";
-	ft_printf("halllo %X", 42);
+	i = ft_printf("halllo %% %d %u %d \n", -42, -42, i);
+    ft_printf("%d \n", i);
+    i = printf("halllo %% %X %u %p\n", -42, -42, i);
 	return (1);
 }
