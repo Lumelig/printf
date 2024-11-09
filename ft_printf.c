@@ -6,7 +6,7 @@
 /*   By: jenne <jenne@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:29:52 by jpflegha          #+#    #+#             */
-/*   Updated: 2024/11/09 14:08:31 by jenne            ###   ########.fr       */
+/*   Updated: 2024/11/09 14:44:16 by jenne            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	print_str(char *str)
 	return (i);
 }
 
-int	print_digit(long n, int base)
+int	print_digit(long n, char c, int base)
 {
 	int		i;
 	char	*symbol;
@@ -42,16 +42,18 @@ int	print_digit(long n, int base)
 	if (n < 0)
 	{
 		write(1, "-", 1);
-		return (print_digit(-n, base) + 1);
+		return (print_digit(-n, base, c) + 1);
 	}
 	else if (n < base)
 	{
+		if (c == 'X')
+			symbol = "123456789ABCDF";
 		return (print_char(symbol[n]));
 	}
 	else
 	{
-		i = print_digit(n / base, base);
-		return (i + print_digit(n % base, base));
+		i = print_digit(n / base, c, base);
+		return (i + print_digit(n % base, c, base));
 	}
 }
 
@@ -65,9 +67,11 @@ int	print_format(char c, va_list ap)
 	else if (c == 's')
 		i = print_str(va_arg(ap, char *));
 	else if (c == 'd')
-		i = print_digit((long)(va_arg(ap, int)), 10);
-	else if (c == 'x' || 'X')
-		i = print_digit((long)(va_arg(ap, unsigned int)), 16);
+		i = print_digit((long)(va_arg(ap, int)), 'd', 10);
+	else if (c == 'x')
+		i = print_digit((long)(va_arg(ap, unsigned int)), 'x', 16);
+	else if (c == 'X')
+		i = print_digit((long)(va_arg(ap, unsigned int)), 'X', 16);
 	else
 		i += write(1, &c, 1);
 	return (i);
@@ -95,6 +99,6 @@ int	ft_printf(const char *str, ...)
 int	main()
 {
 	char *s = "hallo";
-	ft_printf("halllo %%");
+	ft_printf("halllo %X", 42);
 	return (1);
 }
