@@ -6,7 +6,7 @@
 /*   By: jpflegha <jpflegha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:29:52 by jpflegha          #+#    #+#             */
-/*   Updated: 2024/11/09 19:21:03 by jpflegha         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:27:01 by jpflegha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ int	print_str(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		i = write(1, "(null)", 6);
+		return (i);
 	while (*str)
 	{
 		write(1, str, 1);
@@ -43,20 +46,18 @@ int	print_digit(long n, char c, int base)
 	if (n < 0 && c != 'u')
 	{
 		i += write(1, "-", 1);
-		i += print_digit(-n, base, c);
+		n *= -1;
 	}
-	else if (c == 'p')
-		i += write(1, "0x", 2);
 	else if (n < base)
 	{
 		if (c == 'X')
 			symbol = "0123456789ABCDEF";
 		return (print_char(symbol[n]));
 	}
-	else
+	if (n >= base)
 		i += print_digit(n / base, c, base);
 	i += print_digit(n % base, c, base);
-    return (i);
+	return (i);
 }
 
 int	print_format(char c, va_list ap)
@@ -68,10 +69,15 @@ int	print_format(char c, va_list ap)
 		i = print_char(va_arg(ap, int));
 	else if (c == 's')
 		i = print_str(va_arg(ap, char *));
-	else if (c == 'd' || c == 'u')
+	else if (c == 'd' || c == 'i')
 		i = print_digit((long)(va_arg(ap, int)), 'd', 10);
+	else if (c == 'u')
+		i = print_digit(va_arg(ap, unsigned int), 'u', 10);
 	else if (c == 'p')
-		i = print_digit((long)(va_arg(ap, unsigned int)), 'p', 16);
+	{
+		i += write(1, "0x", 2);
+		i = print_digit((unsigned long)(va_arg(ap, void *)), 'x', 16);
+	}
 	else if (c == 'x')
 		i = print_digit((long)(va_arg(ap, unsigned int)), 'x', 16);
 	else if (c == 'X')
@@ -102,10 +108,11 @@ int	ft_printf(const char *str, ...)
 
 int	main()
 {
-    int i = 0;
+    unsigned int i = -42;
 	char *s = "hallo";
-	ft_printf("halllo %% %x %u \n", -2, 42);
-    ft_printf("%d \n", i);
-    printf("halllo %% %X %u %p\n", -2, -42, &i);
+    i = ft_printf("%s \n", "some string with %s hehe");
+	printf("%i", i);
+    i = printf("%s \n", "%some string with s hehe");
+	printf("%i", i);
 	return (1);
 }

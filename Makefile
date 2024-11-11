@@ -6,7 +6,7 @@
 #    By: jpflegha <jpflegha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/06 16:32:01 by jpflegha          #+#    #+#              #
-#    Updated: 2024/11/08 15:45:46 by jpflegha         ###   ########.fr        #
+#    Updated: 2024/11/11 14:53:48 by jpflegha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,11 +16,13 @@ CFLAGS = -Wall -Werror -Wextra
 
 CC = cc
 
-SRC = 
+SRC = ft_printf.c
 
 OBJ = $(SRC:%.c=%.o) 
 
-all : $(OBJ)
+all : $(NAME)
+
+$(NAME) : $(OBJ)
 	ar rcs $@ $^
 
 %.o: %.c
