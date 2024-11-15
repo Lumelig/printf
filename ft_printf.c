@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jenne <jenne@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jpflegha <jpflegha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 16:29:52 by jpflegha          #+#    #+#             */
-/*   Updated: 2024/11/14 10:36:18 by jenne            ###   ########.fr       */
+/*   Updated: 2024/11/15 13:07:14 by jpflegha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ int	print_format(char c, va_list ap)
 	else if (c == 'u')
 		i = print_digit(va_arg(ap, unsigned int), 'u', 10);
 	else if (c == 'p')
-		i += check_pointer((unsigned long)va_arg(ap, void *), 16);
+	{
+		i += write(1, "0x", 2);
+		i += print_pointer((unsigned long long)va_arg(ap, void *), 16);
+	}
 	else if (c == 'x')
 		i += print_digit((long)(va_arg(ap, unsigned int)), 'x', 16);
 	else if (c == 'X')
